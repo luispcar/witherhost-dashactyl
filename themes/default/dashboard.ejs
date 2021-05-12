@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= extra.servers.title.create %></title>
+    <% if (settings.api.arcio.enabled == true) { %>
+      <script async src="https://arc.io/widget.min.js#<%= settings.api.arcio.widgetid %>"></script>
+    <% } %>
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src='https://unpkg.com/nprogress@0.2.0/nprogress.js'></script>
+    <script src='https://unpkg.com/jquery@3.6.0/dist/jquery.min.js'></script>
+    <link rel='stylesheet' href='https://unpkg.com/nprogress@0.2.0/nprogress.css'/>
+    <script src="https://unpkg.com/turbolinks/dist/turbolinks.js"></script>
+    <script>
+      Turbolinks.start();
+      $(document).on('turbolinks:click', function() {
+        NProgress.start();
+      });
+      $(document).on('turbolinks:render', function() {
+        NProgress.done();
+      });
+    </script>
+    <style>
+      .turbolinks-progress-bar {
+        display: none !important;
+      }
+      #nprogress .spinner-icon {
+        border-top-color: #4e81ee !important;
+        border-left-color: #4e81ee !important;
+      }
+      #nprogress .bar {
+        background: #4e81ee !important;
+      }
+      #nprogress .peg {
+        box-shadow: 0 0 10px #4e81ee, 0 0 5px #4e81ee !important;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-800">
+    <ul class="bg-gray-900 w-36 pt-6 fixed top-0 bottom-0 hidden md:flex flex-col justify-start items-center gap-6">
+      <a href="/dashboard" class="w-full">
+        <li class="flex flex-col items-center">
+          <svg width="96" height="96" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M359.484 140L272.164 303.09L308.278 371.047L430.35 140H359.484Z" fill="#4E81EE"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M208.653 140H81L117.746 210.057L144.479 261.024L208.653 140Z" fill="#4E81EE"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M316.085 140H244.899L158.36 303.09L194.472 371.047L233.808 296.319L233.746 297.174L316.085 140Z" fill="#4E81EE"/>
+          </svg>
+        </li>
+      </a>
+      <a href="/dashboard" class="w-full py-4 select-none text-gray-400 hover:text-white transition-colors">
+        <li class="flex flex-col items-center">
+          <svg style="width:48px;height:48px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z" />
+          </svg>
+          <p class="mt-1">Home</p>
+        </li>
+      </a>
+      <a href="/servers" class="w-full py-4 select-none text-gray-400 hover:text-white transition-colors">
+        <li class="flex flex-col items-center">
+          <svg style="width:48px;height:48px" viewBox="0 0 24 24">
+            <g clip-path="url(#clip0)">
+              <path d="M13 21H14C14.2652 21 14.5196 21.1054 14.7071 21.2929C14.8946 21.4804 15 21.7348 15 22H22V24H15C15 24.2652 14.8946 24.5196 14.7071 24.7071C14.5196 24.8946 14.2652 25 14 25H10C9.73478 25 9.48043 24.8946 9.29289 24.7071C9.10536 24.5196 9 24.2652 9 24H2V22H9C9 21.7348 9.10536 21.4804 9.29289 21.2929C9.48043 21.1054 9.73478 21 10 21H11V19H4C3.73478 19 3.48043 18.8946 3.29289 18.7071C3.10536 18.5196 3 18.2652 3 18V14C3 13.7348 3.10536 13.4804 3.29289 13.2929C3.48043 13.1054 3.73478 13 4 13H20C20.2652 13 20.5196 13.1054 20.7071 13.2929C20.8946 13.4804 21 13.7348 21 14V18C21 18.2652 20.8946 18.5196 20.7071 18.7071C20.5196 18.8946 20.2652 19 20 19H13V21ZM4 5H20C20.2652 5 20.5196 5.10536 20.7071 5.29289C20.8946 5.48043 21 5.73478 21 6V10C21 10.2652 20.8946 10.5196 20.7071 10.7071C20.5196 10.8946 20.2652 11 20 11H4C3.73478 11 3.48043 10.8946 3.29289 10.7071C3.10536 10.5196 3 10.2652 3 10V6C3 5.73478 3.10536 5.48043 3.29289 5.29289C3.48043 5.10536 3.73478 5 4 5V5ZM9 9H10V7H9V9ZM9 17H10V15H9V17ZM5 7V9H7V7H5ZM5 15V17H7V15H5Z" fill="currentColor"/>
+            </g>
+            <defs>
+              <clipPath id="clip0">
+              <rect width="18" height="14" fill="white" transform="translate(3 5)"/>
+              </clipPath>
+            </defs>
+          </svg>
+          <p class="mt-1">Servers</p>
+        </li>
+      </a>
+      <% if (settings.api.client.coins.store.enabled == true) { %>
+        <a href="/store" class="w-full py-4 select-none text-gray-400 hover:text-white transition-colors">
+          <li class="flex flex-col items-center">
+            <svg style="width:48px;height:48px" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M17,18C15.89,18 15,18.89 15,20A2,2 0 0,0 17,22A2,2 0 0,0 19,20C19,18.89 18.1,18 17,18M1,2V4H3L6.6,11.59L5.24,14.04C5.09,14.32 5,14.65 5,15A2,2 0 0,0 7,17H19V15H7.42A0.25,0.25 0 0,1 7.17,14.75C7.17,14.7 7.18,14.66 7.2,14.63L8.1,13H15.55C16.3,13 16.96,12.58 17.3,11.97L20.88,5.5C20.95,5.34 21,5.17 21,5A1,1 0 0,0 20,4H5.21L4.27,2M7,18C5.89,18 5,18.89 5,20A2,2 0 0,0 7,22A2,2 0 0,0 9,20C9,18.89 8.1,18 7,18Z" />
+            </svg>
+            <p class="mt-1">Reedem</p>
+          </li>
+        </a>
+      <% } %>
+    </ul>
+    <main class="bg-gray-800 text-gray-100 md:pl-36 w-full h-full">
+      <nav class="hidden md:flex justify-end bg-gray-700 w-full py-2 px-4">
+        <a href="<%= userinfo ? "/logout" : "/login"%>" class="text-gray-400 hover:text-white transition-colors">
+          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19,3H5C3.89,3 3,3.89 3,5V9H5V5H19V19H5V15H3V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M10.08,15.58L11.5,17L16.5,12L11.5,7L10.08,8.41L12.67,11H3V13H12.67L10.08,15.58Z" />
+          </svg>
+        </a>
+      </nav>
+      <nav class="md:hidden flex fixed top-0 justify-between items-center bg-gray-900 w-full py-2 px-8">
+        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z" />
+          </svg>
+        </a>
+        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+          <svg width="64" height="64" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M359.484 140L272.164 303.09L308.278 371.047L430.35 140H359.484Z" fill="#4E81EE"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M208.653 140H81L117.746 210.057L144.479 261.024L208.653 140Z" fill="#4E81EE"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M316.085 140H244.899L158.36 303.09L194.472 371.047L233.808 296.319L233.746 297.174L316.085 140Z" fill="#4E81EE"/>
+          </svg>
+        </a>
+        <a href="<%= userinfo ? "/logout" : "/login"%>" class="text-gray-400 hover:text-white transition-colors">
+          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19,3H5C3.89,3 3,3.89 3,5V9H5V5H19V19H5V15H3V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M10.08,15.58L11.5,17L16.5,12L11.5,7L10.08,8.41L12.67,11H3V13H12.67L10.08,15.58Z" />
+          </svg>
+        </a>
+      </nav>
+      <nav class="md:hidden hidden fixed bg-black bg-opacity-50 top-0 left-0 right-0 bottom-0">
+        <div class="bg-gray-800 w-8/12 h-full py-8">
+          <div class="px-6 mb-6 flex flex-row items-center justify-between">
+            <a href="#">
+              <svg width="64%" viewBox="0 0 2275 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M359.484 140L272.164 303.09L308.278 371.047L430.35 140H359.484Z" fill="#4E81EE"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M208.653 140H81L117.746 210.057L144.479 261.024L208.653 140Z" fill="#4E81EE"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M316.085 140H244.899L158.36 303.09L194.472 371.047L233.807 296.319L233.746 297.174L316.085 140Z" fill="#4E81EE"/>
+                <path d="M594.932 364.42H638.091L677.875 227.477H679.511L719.398 364.42H762.557L822.489 154.966H774.114L739.443 300.807H737.602L699.455 154.966H658.034L619.784 300.5H618.045L583.375 154.966H535L594.932 364.42Z" fill="#4E81EE"/>
+                <path d="M845.372 364.42H888.94V207.33H845.372V364.42ZM867.259 187.08C880.247 187.08 890.884 177.159 890.884 164.989C890.884 152.92 880.247 143 867.259 143C854.372 143 843.736 152.92 843.736 164.989C843.736 177.159 854.372 187.08 867.259 187.08Z" fill="#4E81EE"/>
+                <path d="M1007.4 207.33H977.841V169.693H934.273V207.33H912.795V240.057H934.273V321.875C934.068 352.659 955.034 367.898 986.636 366.568C997.886 366.159 1005.86 363.909 1010.26 362.477L1003.41 330.057C1001.26 330.466 996.659 331.489 992.568 331.489C983.875 331.489 977.841 328.216 977.841 316.148V240.057H1007.4V207.33Z" fill="#4E81EE"/>
+                <path d="M1082.72 273.602C1082.82 253.352 1095.2 241.489 1112.99 241.489C1130.69 241.489 1141.12 252.841 1141.02 272.17V364.42H1184.59V264.398C1184.69 227.58 1163.01 205.284 1130.28 205.284C1106.45 205.284 1090.49 216.534 1083.34 235.045H1081.49V154.966H1039.15V364.42H1082.72V273.602Z" fill="#4E81EE"/>
+                <path d="M1290.46 367.489C1329.33 367.489 1355.51 348.568 1361.64 319.42L1321.35 316.761C1316.95 328.727 1305.7 334.966 1291.18 334.966C1269.39 334.966 1255.59 320.545 1255.59 297.125V297.023H1362.57V285.057C1362.57 231.67 1330.25 205.284 1288.72 205.284C1242.5 205.284 1212.53 238.114 1212.53 286.591C1212.53 336.398 1242.09 367.489 1290.46 367.489ZM1255.59 270.023C1256.51 252.125 1270.11 237.807 1289.44 237.807C1308.36 237.807 1321.45 251.307 1321.55 270.023H1255.59Z" fill="#4E81EE"/>
+                <path d="M1391 364.42H1434.57V275.545C1434.57 256.216 1448.68 242.92 1467.91 242.92C1473.94 242.92 1482.22 243.943 1486.32 245.273V206.614C1482.43 205.693 1477.01 205.08 1472.61 205.08C1455.02 205.08 1440.6 215.307 1434.87 234.739H1433.24V207.33H1391V364.42Z" fill="#4E81EE"/>
+                <path d="M1509.66 364.42H1553.94V277.898H1643.84V364.42H1688.02V154.966H1643.84V241.386H1553.94V154.966H1509.66V364.42Z" fill="#4E81EE"/>
+                <path d="M1794.69 367.489C1842.35 367.489 1872.01 334.864 1872.01 286.489C1872.01 237.807 1842.35 205.284 1794.69 205.284C1747.03 205.284 1717.38 237.807 1717.38 286.489C1717.38 334.864 1747.03 367.489 1794.69 367.489ZM1794.9 333.739C1772.91 333.739 1761.66 313.591 1761.66 286.182C1761.66 258.773 1772.91 238.523 1794.9 238.523C1816.48 238.523 1827.73 258.773 1827.73 286.182C1827.73 313.591 1816.48 333.739 1794.9 333.739Z" fill="#4E81EE"/>
+                <path d="M2031.05 252.125C2027.16 223.182 2003.84 205.284 1964.16 205.284C1923.97 205.284 1897.48 223.898 1897.58 254.17C1897.48 277.693 1912.31 292.932 1942.99 299.068L1970.19 304.489C1983.9 307.25 1990.14 312.261 1990.34 320.136C1990.14 329.443 1980.01 336.091 1964.77 336.091C1949.23 336.091 1938.9 329.443 1936.24 316.659L1893.39 318.909C1897.48 348.977 1923.05 367.489 1964.67 367.489C2005.38 367.489 2034.52 346.727 2034.62 315.739C2034.52 293.034 2019.69 279.432 1989.22 273.193L1960.78 267.466C1946.16 264.295 1940.74 259.284 1940.84 251.716C1940.74 242.307 1951.38 236.17 1964.88 236.17C1980.01 236.17 1989.01 244.455 1991.16 254.58L2031.05 252.125Z" fill="#4E81EE"/>
+                <path d="M2145.62 207.33H2116.06V169.693H2072.49V207.33H2051.01V240.057H2072.49V321.875C2072.29 352.659 2093.25 367.898 2124.86 366.568C2136.11 366.159 2144.08 363.909 2148.48 362.477L2141.63 330.057C2139.48 330.466 2134.88 331.489 2130.79 331.489C2122.09 331.489 2116.06 328.216 2116.06 316.148V240.057H2145.62V207.33Z" fill="#4E81EE"/>
+              </svg>
+            </a>
+            <a href="#">
+              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+              </svg>
+            </a>
+          </div>
+          <ul class="w-full gap-4 flex flex-col justify-center items-center">
+            <a href="#">
+              <li>
+                Home
+              </li>
+            </a>
+            <a href="#">
+              <li>
+                Servers
+              </li>
+            </a>
+            <a href="#">
+              <li>
+                Reedem
+              </li>
+            </a>
+          </ul>
+        </div>
+      </nav>
+      <div class="container mx-auto py-16 pt-24 p-6">
+        <h2 class="text-4xl font-semibold mb-4">Tu cuenta</h2>
+        <%
+          let ram = 0;
+          let disk = 0;
+          let cpu = 0;
+          let servers = pterodactyl.relationships.servers.data.length;
+          for (let i = 0, len = pterodactyl.relationships.servers.data.length; i < len; i++) {
+            ram = ram + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.memory == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.memory : 0);
+            disk = disk + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.disk == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.disk : 0);
+            cpu = cpu + (typeof pterodactyl.relationships.servers.data[i].attributes.limits.cpu == "number" ? pterodactyl.relationships.servers.data[i].attributes.limits.cpu : 0);
+          }
+        %>
+        <div class="flex md:flex-row flex-col items-strech gap-4">
+          <div class="bg-gray-700 p-4 rounded w-full md:w-3/5">
+            <h4>Panel Link: <a href="/panel"><code><%= settings.pterodactyl.domain %></code></a></h4>
+            <div>
+              <h4>Email: <code><%= pterodactyl.email %></code></h4>
+              <h4>Username: <code><%= pterodactyl.username %></code></h4>
+              <% if (settings.api.client.allow.regen == true) { %>
+              <div class="flex flex-col gap-2 items-start mt-1">
+                <a href="/regen" class="inline-flex items-center px-4 py-2 border border-gray-500 rounded-md shadow-sm text-sm font-medium text-gray-50 bg-gray-600 hover:bg-gray-500 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                  <svg class="-ml-1 mr-2 h-5 w-5 text-gray-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" />
+                  </svg>
+                  Regenerate your password
+                </a>
+                <% } %>
+                <a href="/updateinfo" class="inline-flex items-center px-4 py-2 border border-gray-500 rounded-md shadow-sm text-sm font-medium text-gray-50 bg-gray-600 hover:bg-gray-500 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                  <svg class="-ml-1 mr-2 h-5 w-5 text-gray-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                  </svg>
+                  Update your account information
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:w-2/5">
+            <div class="bg-gray-700 rounded p-4">
+              <h3>RAM</h3>
+              <p><code><%= ram %>MB</code> / <code><%= (packages ? packages.ram : 0) + extraresources.ram %>MB</code></p>
+            </div>
+            <div class="bg-gray-700 rounded p-4">
+              <h3>Disco</h3>
+              <p><code><%= disk %>MB</code> / <code><%= (packages ? packages.disk : 0) + extraresources.disk %>MB</code></p>
+            </div>
+            <div class="bg-gray-700 rounded p-4">
+              <h3>CPU</h3>
+              <p><code><%= cpu %>%</code> / <code><%= (packages ? packages.cpu : 0) + extraresources.cpu %>%</code></p>
+            </div>
+            <div class="bg-gray-700 rounded p-4">
+              <h3>Servidores</h3>
+              <p><code><%= servers %> servidor<%= servers == 1 ? "" : "es" %></code> / <code><%= (packages ? packages.servers : 0) + extraresources.servers %> servidores<%= (packages ? packages.servers : 0) + extraresources.servers == 1 ? "" : "s" %></code></p>
+            </div>
+          </div>
+        </div>
+        <% if (req.session.newaccount || req.session.password) { %>
+
+
+        <div class="w-full text-white absolute bottom-0 left-0 right-0 bg-gray-600">
+          <div class="container flex items-center justify-between px-6 py-4 mx-auto">
+            <div class="flex">
+              <svg viewBox="0 0 40 40" class="w-6 h-6 fill-current">
+                <path d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM21.6667 28.3333H18.3334V25H21.6667V28.3333ZM21.6667 21.6666H18.3334V11.6666H21.6667V21.6666Z"></path>
+              </svg>
+              <p class="mx-3">
+                <% if (req.session.newaccount) { %>
+                  A new account has been created for you on the Pterodactyl Panel.<br>
+                <% } %>
+                <% if (req.session.password) { %>
+                  Your <% if (!req.session.newaccount) { %>new <% } %>password is <code><%= req.session.password %></code>! Make sure to keep this password in a safe place.
+                <% } else { %>
+                  Please check your email to set your password.
+                <% } %>
+              </p>
+            </div>
+            <button class="p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none closebtn">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <script>
+          let close = document.getElementsByClassName("closebtn");
+          let i;
+          
+          for (i = 0; i < close.length; i++) {
+            close[i].onclick = function(){
+              let div = this.parentElement;
+              div.style.opacity = "0";
+              setTimeout(function(){ div.style.display = "none"; }, 600);
+            }
+          }
+        </script>
+        <% } %>
+        <h2>Plan</h2>
+        <% if (typeof coins == "number") { %>
+        <p>
+          You have <%= coins %> coin<%= coins == 1 ? "" : "s" %>.
+        </p>
+        <% } %>
+        <% if (pterodactyl.root_admin == true) { %>
+        <button class="button" onclick="window.location.href = '/admin';">Administrator Settings</button>
+        <% } %>
+      </div>
+    </main>
+  </body>
+</html>
