@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <link rel="icon" type="image/png" href="<%= extra.faviconlink %>" />
+    <meta
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      name="viewport"
+    />
+    <link href="/assets/<%= theme %>/style.css" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rubik&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <title><%= extra.store.title %></title>
+    <% if (settings.api.arcio.enabled == true) { %>
+    <script
+      async
+      src="https://arc.io/widget.min.js#<%= settings.api.arcio.widgetid %>"
+    ></script>
+    <% } %>
+  </head>
+  <body></body>
+</html>
